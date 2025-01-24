@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "233709389968",
+    "project_id": "iframedemo-2e52d",
+    "storage_bucket": "iframedemo-2e52d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233709389968:android:8fcf53ecaec80cc62ef015",
+        "android_client_info": {
+          "package_name": "com.iframedemoproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtgnGpzN4b1U34j9m1Bb07XNz8BXplrds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
