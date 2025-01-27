@@ -1,23 +1,29 @@
-import {getMessaging} from '@react-native-firebase/messaging';
+import CookieManager, {Cookie} from '@react-native-cookies/cookies';
+import messaging, {getMessaging} from '@react-native-firebase/messaging';
 import React, {useEffect, useRef} from 'react';
-import {View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import WebView from 'react-native-webview';
-import messaging from '@react-native-firebase/messaging';
 // @ts-ignore
-import CookieManager from 'react-native-cookies';
+
+type CookieWithSameSite = Cookie & {
+  sameSite?: 'none' | 'Lax' | 'strict';
+};
 
 const Home = () => {
   const webviewRef = useRef(null);
+
+  const backgroundColor = 'rgb(18, 18, 18)';
+  const statusBarStyle = 'light-content';
 
   useEffect(() => {
     let isMounted = true; // To prevent state updates if the component is unmounted // Function to set cookies
 
     const setCookies = async (fcmToken: string) => {
       try {
-        const deviceId = DeviceInfo.getUniqueId(); // Define your cookie attributes
+        const deviceId = (await DeviceInfo.getUniqueId()).toString(); // Define your cookie attributes
 
-        const cookieDeviceId = {
+        const cookieDeviceId: CookieWithSameSite = {
           name: 'deviceId',
           value: deviceId,
           domain: 'igra.bg',
@@ -26,10 +32,10 @@ const Home = () => {
           expires: '2030-12-31T23:59:59.000Z', // Set an expiration date
           secure: true, // Ensure cookies are sent over HTTPS
           httpOnly: false, // Set to true if you don't need to access cookies via JavaScript
-          sameSite: 'Lax', // Adjust based on your requirements
+          sameSite: 'Lax',
         };
 
-        const cookieFcmToken = {
+        const cookieFcmToken: CookieWithSameSite = {
           name: 'fcmToken',
           value: fcmToken,
           domain: 'igra.bg',
@@ -83,18 +89,20 @@ const Home = () => {
     };
   }, []);
   return (
-    <View style={{flex: 1}}>
-      <WebView
-        style={{flex: 1}}
-        ref={webviewRef}
-        sharedCookiesEnabled={true}
-        thirdPartyCookiesEnabled={false}
-        // userAgent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)
-        //      AppleWebKit/605.1.15 (KHTML, like Gecko)
-        //      Version/14.0 Mobile/15E148 Safari/604.1"
-        originWhitelist={['*']}
-        source={{
-          html: `
+    <>
+      <StatusBar barStyle={statusBarStyle} backgroundColor={backgroundColor} />
+      <View style={{flex: 1}}>
+        <WebView
+          style={{flex: 1}}
+          ref={webviewRef}
+          sharedCookiesEnabled={true}
+          thirdPartyCookiesEnabled={false}
+          // userAgent="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)
+          //      AppleWebKit/605.1.15 (KHTML, like Gecko)
+          //      Version/14.0 Mobile/15E148 Safari/604.1"
+          originWhitelist={['*']}
+          source={{
+            html: `
           <html>
               <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -107,9 +115,10 @@ const Home = () => {
               </body>
             </html>
           `,
-        }}
-      />
-    </View>
+          }}
+        />
+      </View>
+    </>
   );
 };
 

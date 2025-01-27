@@ -1,14 +1,17 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
-
-import Home from './src/containers/Home';
 import PushNotifications from './src/components/PushNotifications';
+import Home from './src/containers/Home';
 
 function App() {
   useEffect(() => {
-    RNBootSplash.hide();
+    (async () => {
+      await RNBootSplash.hide({fade: true});
+      console.log('Bootsplash hidden');
+    })();
   }, []);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <PushNotifications />
